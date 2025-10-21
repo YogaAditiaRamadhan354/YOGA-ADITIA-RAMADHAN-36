@@ -15,7 +15,7 @@
         <nav class="navbar navbar-expand-lg bg-warning navbar
         -primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Mirza </a>
+                <a class="navbar-brand" href="#">Yoga </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -82,7 +82,7 @@
         </section>
         <footer class="rapih">
             <p>
-                Web ini dibuat oleh Mirza.A
+                Web ini dibuat oleh Yoga A
             </p>
         </footer>
     </div>
@@ -90,5 +90,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js
 "></script>
 </body>
+
 
 </html>
