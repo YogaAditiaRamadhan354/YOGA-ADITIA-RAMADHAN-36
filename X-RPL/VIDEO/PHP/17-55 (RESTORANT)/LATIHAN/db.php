@@ -1,4 +1,5 @@
 <?php 
+
     class DB {
         // Properti
         public $host = "127.0.0.1";
@@ -43,4 +44,5 @@
     // echo "<br>";
 
     // $db->tampil();
+
 ?>
