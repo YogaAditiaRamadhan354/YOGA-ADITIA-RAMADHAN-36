@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Portfolio | Developer</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#4c0519', // rose-950 (elegant dark pink/red)
+                        primary: '#be185d', // rose-700
+                        secondary: '#db2777', // pink-600
+                        tertiary: '#f43f5e', // rose-500
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Animation Classes */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #4c0519;
+            /* rose-950 background */
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Typing Effect Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Scroll Reveal Base Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Gradient Text Helper */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #be185d, #db2777, #f43f5e);
+        }
+
+        /* Progress Bar Animation */
+        .progress-bar-fill {
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+
+        /* Glowing Profile Picture */
+        .profile-glow {
+            box-shadow: 0 0 30px 5px rgba(190, 24, 93, 0.4);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-primary/30">
+
+    <!-- Background Animated Blobs -->
+    <div class="fixed inset-0 w-full h-full -z-10 pointer-events-none overflow-hidden hidden md:block">
+        <div
+            class="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full mix-blend-screen mix-blend-color-dodge filter blur-[100px] animate-blob">
+        </div>
+        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full mix-blend-screen mix-blend-color-dodge filter blur-[100px] animate-blob"
+            style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-96 h-96 bg-tertiary/20 rounded-full mix-blend-screen mix-blend-color-dodge filter blur-[100px] animate-blob"
+            style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- 1. Navbar -->
+    <header class="fixed top-0 w-full z-50 transition-all duration-300" id="navbar">
+        <div
+            class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center bg-dark/70 backdrop-blur-md border-b border-white/10 rounded-b-2xl shadow-lg">
+            <a href="#" class="text-2xl font-bold tracking-tighter text-white">
+                Portfo<span class="text-primary">lio.</span>
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white hover:text-primary transition">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#home" class="hover:text-primary transition-colors">Home</a>
+                <a href="#about" class="hover:text-primary transition-colors">About</a>
+                <a href="#education" class="hover:text-primary transition-colors">Education</a>
+                <a href="#skills" class="hover:text-primary transition-colors">Riwayat pendidikan</a>
+                <a href="#projects" class="hover:text-primary transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
+            </nav>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="hidden absolute w-full bg-dark/95 backdrop-blur-xl border-b border-white/10 flex-col items-center py-6 space-y-6 text-sm font-medium shadow-2xl">
+            <a href="#home" class="mobile-link hover:text-primary">Home</a>
+            <a href="#about" class="mobile-link hover:text-primary">About</a>
+            <a href="#education" class="mobile-link hover:text-primary">Education</a>
+            <a href="#skills" class="mobile-link hover:text-primary">Riwayat pendidikan</a>
+            <a href="#projects" class="mobile-link hover:text-primary">Projects</a>
+            <a href="#contact" class="mobile-link hover:text-primary">Contact</a>
+        </div>
+    </header>
+
+    <!-- 2. Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 px-6 relative">
+        <div class="max-w-4xl text-center z-10 px-4">
+            <p class="text-tertiary font-medium mb-4 tracking-widest uppercase text-sm reveal">Welcome to my space</p>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight reveal">
+                Hi, I'm a <br />
+                <span class="text-gradient typing-cursor" id="typing-text"></span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed reveal">
+                I build interactive, accessible, and high-performance websites. Passionate about crafting exceptional
+                digital experiences.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 reveal">
+                <a href="#projects"
+                    class="px-8 py-4 rounded-full font-bold bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-tertiary text-white shadow-[0_0_20px_rgba(190,24,93,0.3)] hover:shadow-[0_0_30px_rgba(219,39,119,0.5)] transition-all transform hover:-translate-y-1">
+                    Lihat Project
+                </a>
+                <a href="#contact"
+                    class="px-8 py-4 rounded-full font-bold border border-white/20 hover:border-white hover:bg-white/5 transition-all transform hover:-translate-y-1">
+                    Hubungi Saya
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. About Section -->
+    <section id="about" class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold mb-16 text-center text-gradient reveal">About Me</h2>
+            <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                <!-- Profile Image Removed -->
+                <!-- Description -->
+                <div class="flex-1 text-center md:text-left reveal-right">
+                    <h3 class="text-3xl font-bold mb-4">Hello! I am Developer.</h3>
+                    <p class="text-gray-400 leading-relaxed text-lg mb-6">
+                        Saya adalah seorang Web Developer yang bersemangat untuk menciptakan solusi digital yang elegan
+                        dan efisien. Dengan latar belakang yang kuat dalam desain UI/UX dan pemrograman fungsional, saya
+                        mengeksplorasi batas-batas teknologi web modern.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed text-lg pb-6 border-b border-white/10">
+                        Di luar coding, saya gemar mempelajari teknologi baru, berkontribusi dalam komunitas
+                        open-source, dan berkolaborasi untuk memecahkan masalah kompleks.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+                        <div>
+                            <h4 class="text-3xl font-bold text-primary">3+</h4>
+                            <p class="text-xs text-gray-400 mt-1 uppercase">Years Experience</p>
+                        </div>
+                        <div>
+                            <h4 class="text-3xl font-bold text-secondary">25+</h4>
+                            <p class="text-xs text-gray-400 mt-1 uppercase">Projects Completed</p>
+                        </div>
+                        <div>
+                            <h4 class="text-3xl font-bold text-tertiary">10+</h4>
+                            <p class="text-xs text-gray-400 mt-1 uppercase">Technologies Used</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Education Timeline -->
+    <section id="education" class="py-24 px-6 bg-white/5 border-y border-white/5 relative">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold mb-16 text-center text-gradient reveal">Education Journey</h2>
+
+            <div class="relative border-l-2 border-primary/30 ml-4 md:ml-0 md:pl-0">
+                <!-- Timeline Item 1 -->
+                <div class="mb-10 ml-8 md:ml-12 relative reveal">
+                    <div
+                        class="absolute -left-10 md:-left-14 top-1 w-5 h-5 bg-primary rounded-full shadow-[0_0_10px_#be185d] flex justify-center items-center">
+                        <div class="w-2 h-2 bg-dark rounded-full"></div>
+                    </div>
+                    <div
+                        class="bg-dark/80 backdrop-blur-sm border border-white/10 p-6 rounded-2xl hover:border-primary/50 transition duration-300">
+                        <span class="text-tertiary font-bold text-sm tracking-widest mb-1 block">2020 - 2024</span>
+                        <h3 class="text-xl font-bold text-white mb-2">Bachelor's Degree in Computer Science</h3>
+                        <h4 class="text-gray-400 text-sm mb-4">Universitas Teknologi Terdepan</h4>
+                        <p class="text-gray-500 font-light text-sm">Focusing on Software Engineering Algorithms,
+                            Artificial Intelligence, and Advanced Web Architecture.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="mb-10 ml-8 md:ml-12 relative reveal">
+                    <div
+                        class="absolute -left-10 md:-left-14 top-1 w-5 h-5 bg-secondary rounded-full shadow-[0_0_10px_#db2777] flex justify-center items-center">
+                        <div class="w-2 h-2 bg-dark rounded-full"></div>
+                    </div>
+                    <div
+                        class="bg-dark/80 backdrop-blur-sm border border-white/10 p-6 rounded-2xl hover:border-secondary/50 transition duration-300">
+                        <span class="text-tertiary font-bold text-sm tracking-widest mb-1 block">2017 - 2020</span>
+                        <h3 class="text-xl font-bold text-white mb-2">Vocational High School (SMK)</h3>
+                        <h4 class="text-gray-400 text-sm mb-4">SMK Rekayasa Perangkat Lunak</h4>
+                        <p class="text-gray-500 font-light text-sm">Graduated with honors. Mastering basic programming
+                            algorithms (C++, Java, HTML, CSS, PHP).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Riwayat pendidikan Section -->
+    <section id="skills" class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold mb-16 text-center text-gradient reveal">Riwayat pendidikan</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Skill Progress Bars -->
+                <div class="space-y-6 reveal-left">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold flex items-center gap-2"><i
+                                    class="fa-brands fa-html5 text-orange-500"></i> HTML & CSS</span>
+                            <span class="text-primary font-bold">95%</span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-primary to-secondary h-3 rounded-full progress-bar-fill"
+                                data-progress="95%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold flex items-center gap-2"><i
+                                    class="fa-brands fa-js text-yellow-400"></i> JavaScript</span>
+                            <span class="text-secondary font-bold">85%</span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-secondary to-tertiary h-3 rounded-full progress-bar-fill"
+                                data-progress="85%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold flex items-center gap-2"><i
+                                    class="fa-brands fa-react text-cyan-400"></i> React & Tailwind</span>
+                            <span class="text-tertiary font-bold">90%</span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-tertiary to-primary h-3 rounded-full progress-bar-fill"
+                                data-progress="90%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold flex items-center gap-2"><i
+                                    class="fa-brands fa-laravel text-red-500"></i> Laravel & PHP</span>
+                            <span class="text-primary font-bold">80%</span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-red-500 to-orange-400 h-3 rounded-full progress-bar-fill"
+                                data-progress="80%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Grid Icons -->
+                <div class="grid grid-cols-3 md:grid-cols-4 gap-6 reveal-right">
+                    <div
+                        class="flex flex-col items-center justify-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-primary/50 transition cursor-pointer group">
+                        <i
+                            class="fa-brands fa-git-alt text-4xl text-orange-600 mb-2 group-hover:scale-110 transition"></i>
+                        <span class="text-xs text-gray-400">Git</span>
+                    </div>
+                    <div
+                        class="flex flex-col items-center justify-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-secondary/50 transition cursor-pointer group">
+                        <i class="fa-brands fa-figma text-4xl text-pink-500 mb-2 group-hover:scale-110 transition"></i>
+                        <span class="text-xs text-gray-400">Figma</span>
+                    </div>
+                    <div
+                        class="flex flex-col items-center justify-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-tertiary/50 transition cursor-pointer group">
+                        <i
+                            class="fa-brands fa-node-js text-4xl text-green-500 mb-2 group-hover:scale-110 transition"></i>
+                        <span class="text-xs text-gray-400">Node.js</span>
+                    </div>
+                    <div
+                        class="flex flex-col items-center justify-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-primary/50 transition cursor-pointer group">
+                        <i
+                            class="fa-solid fa-database text-4xl text-blue-400 mb-2 group-hover:scale-110 transition"></i>
+                        <span class="text-xs text-gray-400">MySQL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Projects Section -->
+    <section id="projects" class="py-24 px-6 bg-white/5 border-y border-white/5 relative">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold mb-16 text-center text-gradient reveal">Featured Projects</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Project Card 1 -->
+                <div
+                    class="group rounded-3xl bg-dark border border-white/10 overflow-hidden shadow-2xl hover:shadow-[0_0_30px_rgba(190,24,93,0.3)] transition duration-500 reveal">
+                    <div class="overflow-hidden h-56 relative">
+                        <img src="https://via.placeholder.com/600x400/222/be185d?text=Project+1" alt="Project 1"
+                            class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-80"></div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex gap-2 mb-4">
+                            <span
+                                class="px-3 py-1 bg-primary/20 text-primary text-xs font-semibold rounded-full border border-primary/30">React</span>
+                            <span
+                                class="px-3 py-1 bg-secondary/20 text-secondary text-xs font-semibold rounded-full border border-secondary/30">Tailwind</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 text-white">E-Commerce App</h3>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Membangun platform E-Commerce modern secara
+                            full-stack dengan implementasi state management kompleks dan UI/UX yang responsif.</p>
+                        <div class="flex items-center gap-4">
+                            <a href="#"
+                                class="px-5 py-2 bg-white text-dark font-semibold rounded-lg hover:bg-gray-200 transition text-sm">Demo</a>
+                            <a href="#"
+                                class="px-5 py-2 border border-white/30 text-white font-semibold rounded-lg hover:border-white transition text-sm"><i
+                                    class="fa-brands fa-github mr-2"></i>Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div
+                    class="group rounded-3xl bg-dark border border-white/10 overflow-hidden shadow-2xl hover:shadow-[0_0_30px_rgba(219,39,119,0.3)] transition duration-500 reveal">
+                    <div class="overflow-hidden h-56 relative">
+                        <img src="https://via.placeholder.com/600x400/222/db2777?text=Project+2" alt="Project 2"
+                            class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-80"></div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex gap-2 mb-4">
+                            <span
+                                class="px-3 py-1 bg-red-500/20 text-red-500 text-xs font-semibold rounded-full border border-red-500/30">Laravel</span>
+                            <span
+                                class="px-3 py-1 bg-blue-500/20 text-blue-500 text-xs font-semibold rounded-full border border-blue-500/30">MySQL</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 text-white">Company Profile System</h3>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Aplikasi backend menggunakan Laravel REST API
+                            dan sistem autentikasi Sanctum untuk pengolahan data perusahaan secara aman.</p>
+                        <div class="flex items-center gap-4">
+                            <a href="#"
+                                class="px-5 py-2 bg-white text-dark font-semibold rounded-lg hover:bg-gray-200 transition text-sm">Demo</a>
+                            <a href="#"
+                                class="px-5 py-2 border border-white/30 text-white font-semibold rounded-lg hover:border-white transition text-sm"><i
+                                    class="fa-brands fa-github mr-2"></i>Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div
+                    class="group rounded-3xl bg-dark border border-white/10 overflow-hidden shadow-2xl hover:shadow-[0_0_30px_rgba(244,63,94,0.3)] transition duration-500 reveal">
+                    <div class="overflow-hidden h-56 relative">
+                        <img src="https://via.placeholder.com/600x400/222/f43f5e?text=Project+3" alt="Project 3"
+                            class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-80"></div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex gap-2 mb-4">
+                            <span
+                                class="px-3 py-1 bg-yellow-500/20 text-yellow-500 text-xs font-semibold rounded-full border border-yellow-500/30">JavaScript</span>
+                            <span
+                                class="px-3 py-1 bg-purple-500/20 text-purple-500 text-xs font-semibold rounded-full border border-purple-500/30">GSAP</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3 text-white">Interactive Portfolio</h3>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Landing page portofolio interaktif
+                            single-file dengan animasi GSAP, Intersection Observers, dan Dark Mode Premium Styling.</p>
+                        <div class="flex items-center gap-4">
+                            <a href="#"
+                                class="px-5 py-2 bg-white text-dark font-semibold rounded-lg hover:bg-gray-200 transition text-sm">Demo</a>
+                            <a href="#"
+                                class="px-5 py-2 border border-white/30 text-white font-semibold rounded-lg hover:border-white transition text-sm"><i
+                                    class="fa-brands fa-github mr-2"></i>Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Contact Section -->
+    <section id="contact" class="py-24 px-6 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto reveal">
+            <div class="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-10 md:p-16 relative">
+                <div
+                    class="absolute -top-20 -right-20 w-64 h-64 bg-primary/30 blur-[80px] rounded-full pointer-events-none">
+                </div>
+                <div
+                    class="absolute -bottom-20 -left-20 w-64 h-64 bg-tertiary/20 blur-[80px] rounded-full pointer-events-none">
+                </div>
+
+                <div class="text-center mb-12 relative z-10">
+                    <h2 class="text-4xl font-bold text-white mb-4">Get In Touch</h2>
+                    <p class="text-gray-400 text-lg">Tertarik untuk bekerja sama? Mari diskusikan proyek luar biasa
+                        Anda.</p>
+                </div>
+
+                <form class="space-y-6 relative z-10"
+                    onsubmit="event.preventDefault(); alert('Message sent animation triggered!'); this.reset();">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2 ml-2">Name</label>
+                            <input type="text" required
+                                class="w-full px-5 py-4 bg-dark/50 border border-white/10 rounded-2xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-white transition placeholder-gray-600"
+                                placeholder="Yoga">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2 ml-2">Email</label>
+                            <input type="email" required
+                                class="w-full px-5 py-4 bg-dark/50 border border-white/10 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary text-white transition placeholder-gray-600"
+                                placeholder="aditiaramadhanyoga@gmail.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2 ml-2">Message</label>
+                        <textarea rows="5" required
+                            class="w-full px-5 py-4 bg-dark/50 border border-white/10 rounded-2xl focus:outline-none focus:border-tertiary focus:ring-1 focus:ring-tertiary text-white transition placeholder-gray-600 resize-none"
+                            placeholder="How can I help you?"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full py-4 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-tertiary font-bold text-white rounded-2xl shadow-lg hover:shadow-[0_0_20px_#be185d] transition-all transform hover:-translate-y-1">
+                        Send Message <i class="fa-solid fa-paper-plane ml-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center border-t border-white/10 text-gray-500 text-sm">
+        <div class="flex justify-center space-x-6 mb-4">
+            <a href="#" class="text-gray-400 hover:text-white transition"><i
+                    class="fa-brands fa-github text-xl"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i
+                    class="fa-brands fa-linkedin text-xl"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i
+                    class="fa-brands fa-twitter text-xl"></i></a>
+        </div>
+        <p>Copyright &copy; 2026 Developer Portfolio. Crafted with ❤️.</p>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // 1. Typing Effect in Hero
+        const typingTextElement = document.getElementById('typing-text');
+        const roles = ["Web Developer.", "UI/UX Designer.", "Student.", "Tech Enthusiast."];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const currentRole = roles[roleIndex];
+
+            if (isDeleting) {
+                typingTextElement.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingTextElement.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typingSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                typingSpeed = 2000; // Pause at the end
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                typingSpeed = 500; // Pause before typing new word
+            }
+
+            setTimeout(typeEffect, typingSpeed);
+        }
+
+        // Start typing animation
+        setTimeout(typeEffect, 1000);
+
+
+        // 2. Scroll Animation (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Stop observing once animated
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+
+
+        // 3. Progress Bar Animation logic
+        const progressBars = document.querySelectorAll('.progress-bar-fill');
+
+        const progressObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const finalWidth = el.getAttribute('data-progress');
+                    el.style.width = finalWidth;
+                    observer.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        progressBars.forEach(bar => {
+            progressObserver.observe(bar);
+        });
+
+
+        // 4. Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            });
+        });
+    </script>
+</body>
+
+</html>

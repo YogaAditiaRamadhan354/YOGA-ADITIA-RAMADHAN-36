@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kalkulator Digital Sederhana</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;background:#0a0a1a;color:#e4e4e7;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+h1{font-size:1.8rem;font-weight:900;margin-bottom:1.5rem;background:linear-gradient(135deg,#06b6d4,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.calc{width:320px;padding:24px;background:linear-gradient(135deg,#1e1e3a,#2a2a4a);border-radius:28px;box-shadow:0 20px 60px #00000080,0 0 40px #06b6d414;border:1px solid #ffffff10}
+.display{background:#0a0a1a;border-radius:18px;padding:20px 24px;margin-bottom:20px;text-align:right;border:1px solid #06b6d430;min-height:100px;display:flex;flex-direction:column;justify-content:flex-end}
+.expr{font-size:14px;color:#71717a;margin-bottom:8px;min-height:20px;word-break:break-all}
+.result{font-size:2.5rem;font-weight:900;color:#22d3ee;text-shadow:0 0 20px #06b6d440;word-break:break-all}
+.buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.btn{height:58px;border:none;border-radius:14px;font-family:Inter;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.btn:hover{transform:scale(1.05)}
+.btn:active{transform:scale(0.95)}
+.num{background:#2a2a4a;color:#e4e4e7;border:1px solid #ffffff10}
+.num:hover{background:#3b3b5c}
+.op{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff}
+.op:hover{background:linear-gradient(135deg,#9d74f7,#8b5cf6)}
+.func{background:#3b3b5c;color:#f87171;font-size:1rem}
+.func:hover{background:#4a4a6a}
+.eq{background:linear-gradient(135deg,#06b6d4,#0891b2);color:#fff;font-size:1.3rem}
+.eq:hover{background:linear-gradient(135deg,#22d3ee,#06b6d4)}
+.zero{grid-column:span 2}
+a.back{display:inline-block;margin-top:1.5rem;color:#06b6d4;text-decoration:none;font-weight:600;font-size:.9rem}
+a.back:hover{opacity:.7}
+</style>
+</head>
+<body>
+<h1>Kalkulator Digital Sederhana</h1>
+<div class="calc">
+<div class="display">
+<div class="expr" id="expr"></div>
+<div class="result" id="result">0</div>
+</div>
+<div class="buttons">
+<button class="btn func" onclick="clearAll()">AC</button>
+<button class="btn func" onclick="toggleSign()">±</button>
+<button class="btn func" onclick="percent()">%</button>
+<button class="btn op" onclick="setOp('÷')">÷</button>
+<button class="btn num" onclick="addNum('7')">7</button>
+<button class="btn num" onclick="addNum('8')">8</button>
+<button class="btn num" onclick="addNum('9')">9</button>
+<button class="btn op" onclick="setOp('×')">×</button>
+<button class="btn num" onclick="addNum('4')">4</button>
+<button class="btn num" onclick="addNum('5')">5</button>
+<button class="btn num" onclick="addNum('6')">6</button>
+<button class="btn op" onclick="setOp('-')">-</button>
+<button class="btn num" onclick="addNum('1')">1</button>
+<button class="btn num" onclick="addNum('2')">2</button>
+<button class="btn num" onclick="addNum('3')">3</button>
+<button class="btn op" onclick="setOp('+')">+</button>
+<button class="btn num zero" onclick="addNum('0')">0</button>
+<button class="btn num" onclick="addDot()">.</button>
+<button class="btn eq" onclick="calculate()">=</button>
+</div>
+</div>
+<a class="back" href="/">← Kembali ke Portfolio</a>
+<script>
+let cur='0',prev='',op='',newNum=true;
+function update(){
+document.getElementById('result').textContent=cur;
+document.getElementById('expr').textContent=prev?(prev+' '+op):''}
+function addNum(n){
+if(newNum){cur=n;newNum=false}
+else{if(cur==='0'&&n!=='.')cur=n;else cur+=n}
+update()}
+function addDot(){if(!cur.includes('.')){cur+='.';newNum=false;update()}}
+function setOp(o){if(prev&&!newNum)calculate();prev=cur;op=o;newNum=true;update()}
+function calculate(){
+if(!prev||newNum)return;
+let a=parseFloat(prev),b=parseFloat(cur),r=0;
+if(op==='+')r=a+b;
+else if(op==='-')r=a-b;
+else if(op==='×')r=a*b;
+else if(op==='÷')r=b!==0?a/b:'Error';
+if(typeof r==='number'){r=Math.round(r*1e10)/1e10;cur=r.toString()}
+else cur=r;
+prev='';op='';newNum=true;update()}
+function clearAll(){cur='0';prev='';op='';newNum=true;update()}
+function toggleSign(){cur=(parseFloat(cur)*-1).toString();update()}
+function percent(){cur=(parseFloat(cur)/100).toString();update()}
+update();
+</script>
+</body>
+</html>
