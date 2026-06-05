@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Dynamic Blue Theme */
+  --hue: 210;
+  --bg-color: hsl(var(--hue), 40%, 8%);
+  --text-primary: hsl(var(--hue), 20%, 98%);
+  --text-secondary: hsl(var(--hue), 10%, 75%);
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.4);
+
+  --primary-glow: hsla(210, 100%, 60%, 0.3);
+  --accent: hsl(205, 90%, 60%);
+
+  --radius-lg: 28px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* Mencegah zoom otomatis pada input di iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  background-image:
+    radial-gradient(circle at 15% 50%, hsla(220, 80%, 25%, 0.4), transparent 30%),
+    radial-gradient(circle at 85% 30%, hsla(190, 80%, 30%, 0.4), transparent 30%);
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100dvh; /* dvh: dynamic viewport height, lebih akurat di mobile */
+  min-height: 100vh;  /* fallback untuk browser lama */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  /* Scroll yang lebih smooth di iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  /* Hapus highlight biru saat tap di mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+input {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  /* Cegah zoom saat tap input di iOS (font minimum 16px) */
+  font-size: max(16px, 1rem);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
